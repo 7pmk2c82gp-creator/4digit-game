@@ -3,28 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>4桁コードチャレンジ</title>
 
   <style>
     body {
-      font-family: sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
       text-align: center;
-      padding: 50px 20px;
+      padding: 40px 20px;
       background: #f5f5f5;
     }
 
     .box {
-      max-width: 400px;
+      max-width: 420px;
       margin: auto;
       background: white;
-      padding: 30px;
+      padding: 30px 20px;
       border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 10px;
     }
 
     #code {
-      font-size: 40px;
+      font-size: 42px;
       letter-spacing: 10px;
       margin: 25px 0;
+      font-weight: bold;
     }
 
     input {
@@ -32,20 +39,35 @@
       width: 180px;
       padding: 10px;
       text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 10px;
     }
 
     button {
-      font-size: 18px;
-      padding: 12px 20px;
-      margin: 10px;
+      font-size: 17px;
+      padding: 12px 18px;
+      margin: 8px 4px;
       border: none;
       border-radius: 10px;
-      cursor: pointer;
+      background: #222;
+      color: white;
     }
 
     #result {
       font-size: 20px;
-      margin: 20px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    #hint {
+      margin-top: 20px;
+      font-size: 18px;
+      line-height: 1.8;
+    }
+
+    #attempts {
+      margin-top: 15px;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -76,34 +98,124 @@
 
   <div id="result"></div>
 
+  <div id="hint"></div>
+
+  <div id="attempts">
+    試行回数：0回
+  </div>
+
 </div>
 
 <script>
 
 let correctCode = "";
+let attemptCount = 0;
 
+
+// 新しい問題を作る
 function newQuestion() {
+
   const number = Math.floor(Math.random() * 10000);
 
   correctCode = String(number).padStart(4, "0");
 
+  attemptCount = 0;
+
   document.getElementById("code").textContent = "？？？？";
 
   document.getElementById("answer").value = "";
+
   document.getElementById("result").textContent = "";
+
+  document.getElementById("hint").textContent = "";
+
+  document.getElementById("attempts").textContent =
+    "試行回数：0回";
 }
 
+
+// 答えを判定
 function checkAnswer() {
 
   const answer = document.getElementById("answer").value;
 
-  if (answer === correctCode) {
-    document.getElementById("result").textContent = "🎉 正解！";
-  } else {
-    document.getElementById("result").textContent = "❌ 不正解！";
+  // 4桁じゃなかったら終了
+  if (!/^\d{4}$/.test(answer)) {
+
+    document.getElementById("result").textContent =
+      "⚠️ 4桁の数字を入力してね";
+
+    return;
   }
+
+
+  attemptCount++;
+
+  document.getElementById("attempts").textContent =
+    "試行回数：" + attemptCount + "回";
+
+
+  // HIGH / LOW
+  const guessNumber = Number(answer);
+  const correctNumber = Number(correctCode);
+
+  let highLow = "";
+
+  if (guessNumber > correctNumber) {
+
+    highLow = "LOW 🔽";
+
+  } else if (guessNumber < correctNumber) {
+
+    highLow = "HIGH 🔼";
+
+  } else {
+
+    highLow = "🎉 正解！";
+  }
+
+
+  // 位置一致を調べる
+  let positionMatch = 0;
+
+  for (let i = 0; i < 4; i++) {
+
+    if (answer[i] === correctCode[i]) {
+      positionMatch++;
+    }
+
+  }
+
+
+  // 正解の場合
+  if (answer === correctCode) {
+
+    document.getElementById("result").textContent =
+      "🎉 正解！";
+
+    document.getElementById("hint").innerHTML =
+      "答え：<strong>" + correctCode + "</strong><br>" +
+      "位置一致：4 / 4<br>" +
+      "試行回数：" + attemptCount + "回";
+
+  }
+
+  // 不正解の場合
+  else {
+
+    document.getElementById("result").textContent =
+      "❌ 不正解";
+
+    document.getElementById("hint").innerHTML =
+      "HIGH / LOW：<strong>" + highLow + "</strong><br>" +
+      "位置一致：<strong>" + positionMatch + " / 4</strong>";
+
+  }
+
 }
 
+
+// 最初の問題
 newQuestion();
 
 </script>
