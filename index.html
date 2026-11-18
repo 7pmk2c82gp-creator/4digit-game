@@ -53,9 +53,19 @@
       color: white;
     }
 
+    /* 判定結果 */
     #result {
-      font-size: 20px;
       margin-top: 20px;
+    }
+
+    #resultIcon {
+      font-size: 90px;
+      line-height: 1;
+      margin: 15px 0;
+    }
+
+    #resultText {
+      font-size: 28px;
       font-weight: bold;
     }
 
@@ -67,7 +77,8 @@
 
     #attempts {
       margin-top: 15px;
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -96,7 +107,13 @@
 
   <button onclick="newQuestion()">新しい問題</button>
 
-  <div id="result"></div>
+  <div id="result">
+
+    <div id="resultIcon"></div>
+
+    <div id="resultText"></div>
+
+  </div>
 
   <div id="hint"></div>
 
@@ -112,7 +129,7 @@ let correctCode = "";
 let attemptCount = 0;
 
 
-// 新しい問題を作る
+// 新しい問題
 function newQuestion() {
 
   const number = Math.floor(Math.random() * 10000);
@@ -125,7 +142,9 @@ function newQuestion() {
 
   document.getElementById("answer").value = "";
 
-  document.getElementById("result").textContent = "";
+  document.getElementById("resultIcon").textContent = "";
+
+  document.getElementById("resultText").textContent = "";
 
   document.getElementById("hint").textContent = "";
 
@@ -134,16 +153,18 @@ function newQuestion() {
 }
 
 
-// 答えを判定
+// 判定
 function checkAnswer() {
 
   const answer = document.getElementById("answer").value;
 
-  // 4桁じゃなかったら終了
+  // 4桁チェック
   if (!/^\d{4}$/.test(answer)) {
 
-    document.getElementById("result").textContent =
-      "⚠️ 4桁の数字を入力してね";
+    document.getElementById("resultIcon").textContent = "⚠️";
+
+    document.getElementById("resultText").textContent =
+      "4桁の数字を入力してね";
 
     return;
   }
@@ -169,13 +190,10 @@ function checkAnswer() {
 
     highLow = "HIGH 🔼";
 
-  } else {
-
-    highLow = "🎉 正解！";
   }
 
 
-  // 位置一致を調べる
+  // 位置一致
   let positionMatch = 0;
 
   for (let i = 0; i < 4; i++) {
@@ -187,24 +205,27 @@ function checkAnswer() {
   }
 
 
-  // 正解の場合
+  // 正解
   if (answer === correctCode) {
 
-    document.getElementById("result").textContent =
-      "🎉 正解！";
+    document.getElementById("resultIcon").textContent = "🎉";
+
+    document.getElementById("resultText").textContent =
+      "正解！";
 
     document.getElementById("hint").innerHTML =
       "答え：<strong>" + correctCode + "</strong><br>" +
-      "位置一致：4 / 4<br>" +
-      "試行回数：" + attemptCount + "回";
+      "位置一致：<strong>4 / 4</strong>";
 
   }
 
-  // 不正解の場合
+  // 不正解
   else {
 
-    document.getElementById("result").textContent =
-      "❌ 不正解";
+    document.getElementById("resultIcon").textContent = "❌";
+
+    document.getElementById("resultText").textContent =
+      "不正解";
 
     document.getElementById("hint").innerHTML =
       "HIGH / LOW：<strong>" + highLow + "</strong><br>" +
