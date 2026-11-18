@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4桁コードチャレンジ</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px 20px;
+      background: #f5f5f5;
+    }
+
+    .box {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+    }
+
+    #code {
+      font-size: 40px;
+      letter-spacing: 10px;
+      margin: 25px 0;
+    }
+
+    input {
+      font-size: 24px;
+      width: 180px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 12px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #result {
+      font-size: 20px;
+      margin: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h1>4桁コードチャレンジ</h1>
+
+  <p>4桁のコードを当てよう！</p>
+
+  <div id="code">？？？？</div>
+
+  <input
+    id="answer"
+    type="text"
+    inputmode="numeric"
+    maxlength="4"
+    placeholder="4桁を入力"
+  >
+
+  <br>
+
+  <button onclick="checkAnswer()">判定</button>
+
+  <button onclick="newQuestion()">新しい問題</button>
+
+  <div id="result"></div>
+
+</div>
+
+<script>
+
+let correctCode = "";
+
+function newQuestion() {
+  const number = Math.floor(Math.random() * 10000);
+
+  correctCode = String(number).padStart(4, "0");
+
+  document.getElementById("code").textContent = "？？？？";
+
+  document.getElementById("answer").value = "";
+  document.getElementById("result").textContent = "";
+}
+
+function checkAnswer() {
+
+  const answer = document.getElementById("answer").value;
+
+  if (answer === correctCode) {
+    document.getElementById("result").textContent = "🎉 正解！";
+  } else {
+    document.getElementById("result").textContent = "❌ 不正解！";
+  }
+}
+
+newQuestion();
+
+</script>
+
+</body>
+</html>
